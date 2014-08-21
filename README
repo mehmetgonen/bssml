@@ -1,0 +1,17 @@
+This package contains Matlab implementations of the algorithms proposed in "Coupled Dimensionality Reduction and Classification for Supervised and Semi-Supervised Multilabel Learning", which is appearing in PRLETTERS, and "Bayesian Supervised Multilabel Learning with Coupled Embedding and Classification", which is appearing in SDM 2012.
+
+demo_supervised.m file shows how to use the algorithm for supervised learning.
+demo_semisupervised.m file shows how to use the algorithm for semi-supervised learning.
+
+BSSML methods
+-------------
+* bssml_supervised_classification_variational_train.m => training procedure for supervised learning
+* bssml_supervised_classification_variational_test.m => test procedure for supervised learning
+* bssml_semisupervised_classification_variational_train.m => training procedure for semi-supervised learning
+* bssml_semisupervised_classification_variational_test.m => test procedure for semi-supervised learning
+
+If you use any of the algorithms implemented in this package, please cite one of the following papers:
+
+Mehmet Gonen. Coupled Dimensionality Reduction and Classification for Supervised and Semi-Supervised Multilabel Learning. Pattern Recognition Letters, 38:132-141, 2014.
+
+Mehmet Gonen. Bayesian Supervised Multilabel Learning with Coupled Embedding and Classification. Proceedings of the 12th SIAM International Conference on Data Mining (SDM 2012), Anaheim, California, USA, 2012.
