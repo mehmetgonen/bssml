@@ -2,21 +2,21 @@
 
 function prediction = bssml_supervised_classification_variational_test(X, state)
     N = size(X, 2);
-    L = size(state.bW.mean, 2);
-    R = size(state.bW.mean, 1) - 1;
+    L = size(state.bW.mu, 2);
+    R = size(state.bW.mu, 1) - 1;
 
-    prediction.Z.mean = zeros(R, N);
-    prediction.Z.covariance = zeros(R, N);
+    prediction.Z.mu = zeros(R, N);
+    prediction.Z.sigma = zeros(R, N);
     for s = 1:R
-        prediction.Z.mean(s, :) = state.Q.mean(:, s)' * X;
-        prediction.Z.covariance(s, :) = state.parameters.sigmaz^2 + diag(X' * state.Q.covariance(:, :, s) * X);
+        prediction.Z.mu(s, :) = state.Q.mu(:, s)' * X;
+        prediction.Z.sigma(s, :) = state.parameters.sigma_z^2 + diag(X' * state.Q.sigma(:, :, s) * X);
     end
 
-    prediction.T.mean = state.bW.mean' * [ones(1, N); prediction.Z.mean];
-    prediction.T.covariance = zeros(L, N);
+    prediction.T.mu = state.bW.mu' * [ones(1, N); prediction.Z.mu];
+    prediction.T.sigma = zeros(L, N);
     for o = 1:L
-        prediction.T.covariance(o, :) = 1 + diag([ones(1, N); prediction.Z.mean]' * state.bW.covariance(:, :, o) * [ones(1, N); prediction.Z.mean]);
+        prediction.T.sigma(o, :) = 1 + diag([ones(1, N); prediction.Z.mu]' * state.bW.sigma(:, :, o) * [ones(1, N); prediction.Z.mu]);
     end
 
-    prediction.P = 1 - normcdf(-prediction.T.mean ./ prediction.T.covariance);
+    prediction.P = 1 - normcdf(-prediction.T.mu ./ prediction.T.sigma);
 end

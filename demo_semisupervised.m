@@ -35,7 +35,7 @@ parameters.sample = 200;
 parameters.seed = 1606;
 
 %set the standard deviation of projected instances
-parameters.sigmaz = 0.1;
+parameters.sigma_z = 0.1;
 
 %initialize the data matrix and class labels for training
 Xtrain = ??; %should be an D x Ntra matrix containing input data for training samples
