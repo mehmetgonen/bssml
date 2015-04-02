@@ -107,7 +107,7 @@ function state = bssml_supervised_classification_variational_train(X, Y, paramet
                     qqT.mu = zeros(D, D, R);
                     for s = 1:R
                         qqT.mu(:, :, s) = Q.mu(:, s) * Q.mu(:, s)' + Q.sigma(:, :, s);
-                        lb = lb - 0.5 * phi.alpha(s) * phi.beta(s) * sum(diag(qqT.mu(:, :, s))) - 0.5 * (D * log2pi - D * log(phi.alpha(s) * phi.beta(s)));
+                        lb = lb - 0.5 * phi.alpha(s) * phi.beta(s) * sum(diag(qqT.mu(:, :, s))) - 0.5 * (D * log2pi - D * (psi(phi.alpha(s)) + log(phi.beta(s))));
                     end
                 otherwise
                     %%%% p(Phi)
@@ -116,7 +116,7 @@ function state = bssml_supervised_classification_variational_train(X, Y, paramet
                     qqT.mu = zeros(D, D, R);
                     for s = 1:R
                         qqT.mu(:, :, s) = Q.mu(:, s) * Q.mu(:, s)' + Q.sigma(:, :, s);
-                        lb = lb - 0.5 * sum(Phi.alpha(:, s) .* Phi.beta(:, s) .* diag(qqT.mu(:, :, s))) - 0.5 * (D * log2pi - sum(log(Phi.alpha(:, s) .* Phi.beta(:, s))));
+                        lb = lb - 0.5 * sum(Phi.alpha(:, s) .* Phi.beta(:, s) .* diag(qqT.mu(:, :, s))) - 0.5 * (D * log2pi - sum(psi(Phi.alpha(:, s)) + log(Phi.beta(:, s))));
                     end
             end
             %%%% p(Z | Q, X)
@@ -126,14 +126,14 @@ function state = bssml_supervised_classification_variational_train(X, Y, paramet
             lb = lb + sum((parameters.alpha_lambda - 1) * (digamma(lambda.alpha) + log(lambda.beta)) - lambda.alpha .* lambda.beta / parameters.beta_lambda - gammaln(parameters.alpha_lambda) - parameters.alpha_lambda * log(parameters.beta_lambda));
             %%%% p(b | lambda)
             bbT.mu = diag(bW.mu(1, :)'.^2 + squeeze(bW.sigma(1, 1, :)));
-            lb = lb - 0.5 * sum(lambda.alpha .* lambda.beta .* diag(bbT.mu)) - 0.5 * (L * log2pi - sum(log(lambda.alpha .* lambda.beta)));
+            lb = lb - 0.5 * sum(lambda.alpha .* lambda.beta .* diag(bbT.mu)) - 0.5 * (L * log2pi - sum(psi(lambda.alpha) + log(lambda.beta)));
             %%%% p(Psi)
             lb = lb + sum(sum((parameters.alpha_psi - 1) * (digamma(Psi.alpha) + log(Psi.beta)) - Psi.alpha .* Psi.beta / parameters.beta_psi - gammaln(parameters.alpha_psi) - parameters.alpha_psi * log(parameters.beta_psi)));
             %%%% p(W | Psi)
             wwT.mu = zeros(R, R, L);
             for o = 1:L
                 wwT.mu(:, :, o) = bW.mu(2:R + 1, o) * bW.mu(2:R + 1, o)' + bW.sigma(2:R + 1, 2:R + 1, o);
-                lb = lb - 0.5 * sum(Psi.alpha(:, o) .* Psi.beta(:, o) .* diag(wwT.mu(:, :, o))) - 0.5 * (R * log2pi - sum(log(Psi.alpha(:, o) .* Psi.beta(:, o))));
+                lb = lb - 0.5 * sum(Psi.alpha(:, o) .* Psi.beta(:, o) .* diag(wwT.mu(:, :, o))) - 0.5 * (R * log2pi - sum(psi(Psi.alpha(:, o)) + log(Psi.beta(:, o))));
             end
             %%%% p(T | b, W, Z)
             for o = 1:L            
