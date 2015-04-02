@@ -121,7 +121,7 @@ function state = bssml_supervised_classification_variational_train(X, Y, paramet
             end
             %%%% p(Z | Q, X)
             ZZT.mu = Z.mu * Z.mu' + N * Z.sigma;
-            lb = lb - 0.5 * sum(diag(ZZT.mu)) + sum(sum((Q.mu' * X) .* Z.mu)) - 0.5 * sum(sum(sum(qqT.mu, 3) * XXT')) - 0.5 * N * R * (log2pi + 2 * log(sigma_z));
+            lb = lb - 0.5 * sigma_z^-2 * sum(diag(ZZT.mu)) + sigma_z^-2 * sum(sum((Q.mu' * X) .* Z.mu)) - 0.5 * sigma_z^-2 * sum(sum(sum(qqT.mu, 3) * XXT')) - 0.5 * N * R * (log2pi + 2 * log(sigma_z));
             %%%% p(lambda)
             lb = lb + sum((parameters.alpha_lambda - 1) * (digamma(lambda.alpha) + log(lambda.beta)) - lambda.alpha .* lambda.beta / parameters.beta_lambda - gammaln(parameters.alpha_lambda) - parameters.alpha_lambda * log(parameters.beta_lambda));
             %%%% p(b | lambda)
