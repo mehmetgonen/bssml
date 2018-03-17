@@ -1,5 +1,3 @@
-% Mehmet Gonen (mehmet.gonen@gmail.com)
-
 function state = bssml_supervised_classification_variational_train(X, Y, parameters)
     rand('state', parameters.seed); %#ok<RAND>
     randn('state', parameters.seed); %#ok<RAND>

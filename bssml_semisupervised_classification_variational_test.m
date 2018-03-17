@@ -1,5 +1,3 @@
-% Mehmet Gonen (mehmet.gonen@gmail.com)
-
 function prediction = bssml_semisupervised_classification_variational_test(X, state)
     N = size(X, 2);
     L = size(state.bW.mu, 2);
